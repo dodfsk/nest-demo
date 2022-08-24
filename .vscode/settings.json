@@ -1,0 +1,47 @@
+{
+	"git.confirmSync": false,
+	"terminal.integrated.fontSize": 13,
+	"vetur.format.options.tabSize": 4,
+	"vetur.format.options.useTabs": true,
+	"eslint.packageManager": "yarn",
+    "prettier.tabWidth": 4,
+	"[javascript]": {
+		"editor.defaultFormatter": "vscode.typescript-language-features"
+	},
+	"volar.codeLens.scriptSetupTools": true,
+	"volar.icon.vite": false,
+	"[vue]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"editor.detectIndentation": false,
+	"volar.takeOverMode.enabled": false,
+	"javascript.format.enable": false,
+	"typescript.format.enable": false,
+	"vetur.validation.script": false,
+
+	"terminal.integrated.fontFamily": "monospace",
+	"git.suggestSmartCommit": false,
+	"git.ignoreRebaseWarning": true,
+    "editor.formatOnSave": false,
+    "[jsonc]": {
+        "editor.defaultFormatter": "vscode.json-language-features"
+    },
+    "editor.fastScrollSensitivity": 1,
+    "workbench.list.fastScrollSensitivity": 1,
+    "editor.codeActionsOnSave": {
+    },
+    "terminal.integrated.fastScrollSensitivity": 1,
+    "[json]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.linkedEditing": true,
+    "search.followSymlinks": false,
+    "editor.smoothScrolling": true,
+    "prettier.useTabs": true,
+    "editor.guides.bracketPairs": "active",
+    "prettier.singleQuote": true,
+    "prettier.printWidth": 160,
+    "[dockercompose]": {
+        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    },
+}

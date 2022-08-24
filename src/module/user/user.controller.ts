@@ -16,9 +16,8 @@ export class UserController {
     summary: "用户登录",
   })
   async login(@Req() req) {
-    const userInfo=req.user//local守卫验证后的结果
-    console.log(userInfo);
-    return await this.userService.login(userInfo);
+    const {token}=req.user//local守卫验证后的结果
+    return await this.userService.login(token);
   }
 //   async login(@Body( ) userInfo:User) {    
 //     return await this.userService.login(userInfo);

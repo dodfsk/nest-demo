@@ -1,4 +1,6 @@
-import { Module } from '@nestjs/common';
+import { Module,CacheModule } from '@nestjs/common';
+import * as redisStore from 'cache-manager-redis-store';
+
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { DbModule } from './common/db/db.module';
@@ -15,6 +17,15 @@ import { RoomController } from './module/room/room.controller';
     ConfigModule.forRoot({
         isGlobal: true,
     }),//.env环境变量  全局
+    CacheModule.register({
+        //module option
+        isGlobal:true,
+        //store
+        store: redisStore,
+        host: 'localhost',
+        port: 6379,
+        // auth_pass:1,
+    }),//缓存模块 全局
 	DbModule, 
 	UserModule, 
     RoomModule, 

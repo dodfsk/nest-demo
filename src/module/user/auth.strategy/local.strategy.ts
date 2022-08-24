@@ -1,14 +1,19 @@
 // local.strategy.ts
 //本地登录-密文验证策略
+import { Inject,CACHE_MANAGER,BadRequestException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { IStrategyOptions, Strategy } from 'passport-local';
-import { BadRequestException } from '@nestjs/common';
 import { compareSync } from 'bcryptjs';
 import { UserModel } from '@/interface/user.interface';
 import { ResponseData } from '@/interface/common.interface';
+import { JwtService } from '@nestjs/jwt';
+import {Cache} from 'cache-manager';
 
 export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
-  constructor() {
+  constructor(
+    private jwtService: JwtService, //注入jwtService
+    @Inject(CACHE_MANAGER) private cacheManage: Cache, //注入缓存管理器
+    ) {
     super({
       usernameField: 'username',
       passwordField: 'password',
@@ -17,30 +22,36 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
 
   async validate(username: string, password: string) {
     console.log(`local策略被守卫调用-`, username);
-    const localReq = await UserModel.findOne({ username }).select('+password'); //+运算符包括其下的所有其他属性
+    const userInfo = await UserModel.findOne({ username }).select('+password'); //+运算符包括其下的所有其他属性
 
-    if (!localReq) {
-      //   throw new BadRequestException('用户名不正确！');
-      const res:ResponseData={
+    if (!userInfo) {
+      const response:ResponseData={
         message: '登录失败!',
         meta: '用户名不正确',
-        status: '6000',
+        code: 6000,
         data: {},
       }
-      throw new BadRequestException(res);
+      throw new BadRequestException(response);
     }
-    console.log(password, localReq.password);
+    console.log(password, userInfo.password);
 
-    if (!compareSync(password, localReq.password)) {
-        const res:ResponseData={
+    if (!compareSync(password, userInfo.password)) {
+        const response:ResponseData={
             message: '登录失败!',
             meta: '密码错误',
-            status: '6000',
+            code: 6000,
             data: {},
         }
-      throw new BadRequestException(res);
+      throw new BadRequestException(response);
     }
-
-    return localReq;
+    const _id=String(userInfo._id);
+    const payload = { _id};
+    const token = this.jwtService.sign(payload);
+    const value = await this.cacheManage.set(
+        _id, 
+        token, 
+        {ttl: 3600,}
+    );
+    return {token};
   }
 }

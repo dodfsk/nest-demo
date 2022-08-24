@@ -10,7 +10,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   app.setGlobalPrefix('api');
   app.enableCors();
-  app.useGlobalFilters(new HttpExceptionFilter());
+  app.useGlobalFilters(new HttpExceptionFilter());//全局过滤器
   
   //swagger config↓
   const config = new DocumentBuilder()
@@ -25,16 +25,16 @@ async function bootstrap() {
   //swagger↑
 
   //session config↓
-  app.use(
-    session({
-      secret: 'hmmm', //服务端session签名
-      rolling: true, //每次请求强制设置cookie,充值过期时间,默认false
-      name: 'hmmm.sid', //客户端cookie名字
-      cookie: {
-        maxAge: 86400, //单位秒
-      },
-    }),
-  );
+//   app.use(
+//     session({
+//       secret: 'hmmm', //服务端session签名
+//       rolling: true, //每次请求强制设置cookie,充值过期时间,默认false
+//       name: 'hmmm.sid', //客户端cookie名字
+//       cookie: {
+//         maxAge: 86400, //单位秒
+//       },
+//     }),
+//   );
   await app.listen(listenPort);
 }
 bootstrap();
