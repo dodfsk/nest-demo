@@ -9,14 +9,14 @@ export class Reply {
     description: '发布者username',
     example: 'admin',
   })
-  public from!: string;
+  public from: string;
 
   @Prop({ required: true })
   @ApiProperty({
     description: '内容',
     example: '这是二级评论内容',
   })
-  public content!: string;
+  public content: string;
 
   @Prop()
   @ApiProperty({
@@ -25,7 +25,9 @@ export class Reply {
   })
   public replyTo?: string;
 
-  @Prop()
+  @Prop({
+    default:()=>new Date()
+  })
   @ApiProperty({
     description: '发布时间',
     example: '2022-08-14',
@@ -49,7 +51,7 @@ export class Comment {
     description: 'hv号',
     example: 'hv000000',
   })
-  public hid!: string;
+  public hid: string;
 
   @Prop({ required: true })
   @ApiProperty({
@@ -65,7 +67,9 @@ export class Comment {
   })
   public from!: string;
 
-  @Prop()
+  @Prop({
+    default:()=>new Date()
+  })
   @ApiProperty({
     description: '发布时间',
     example: '2022-08-14',

@@ -3,15 +3,16 @@ import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { hashSync } from 'bcryptjs';
 
 //用户表结构
+//@Prop定义表结构相关
 
 @modelOptions({
   schemaOptions: { collection: 'user' },
 }) //固定表名
 export class User {
-  @Prop({ 
-    required: true, 
-    unique: true //code:11000 字段已存在
-})
+  @Prop({
+    required: true,
+    unique: true, //code:11000 字段已存在
+  })
   @ApiProperty({
     description: '用户名',
     example: 'admin',
@@ -20,7 +21,7 @@ export class User {
 
   @Prop({
     required: true,
-    select:false,
+    select: false, //默认查询中隐藏
     set(val: string) {
       return val ? hashSync(val, 10) : val;
     },

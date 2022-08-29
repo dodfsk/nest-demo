@@ -1,7 +1,5 @@
-// local.strategy.ts
-//本地登录-密文验证策略
-import { Inject,CACHE_MANAGER,BadRequestException } from '@nestjs/common';
-import { PassportStrategy } from '@nestjs/passport';
+import { Inject,CACHE_MANAGER,ForbiddenException, ExecutionContext } from '@nestjs/common';
+import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { IStrategyOptions, Strategy } from 'passport-local';
 import { compareSync } from 'bcryptjs';
 import { UserModel } from '@/interface/user.interface';
@@ -9,6 +7,7 @@ import { ResponseData } from '@/interface/common.interface';
 import { JwtService } from '@nestjs/jwt';
 import {Cache} from 'cache-manager';
 
+/**local策略-密文验证 */
 export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
   constructor(
     private jwtService: JwtService, //注入jwtService
@@ -29,9 +28,8 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
         message: '登录失败!',
         meta: '用户名不正确',
         code: 6000,
-        data: {},
       }
-      throw new BadRequestException(response);
+      throw new ForbiddenException(response);
     }
     console.log(password, userInfo.password);
 
@@ -40,9 +38,8 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
             message: '登录失败!',
             meta: '密码错误',
             code: 6000,
-            data: {},
         }
-      throw new BadRequestException(response);
+      throw new ForbiddenException(response);
     }
     const _id=String(userInfo._id);
     const payload = { _id};
@@ -50,8 +47,26 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     const value = await this.cacheManage.set(
         _id, 
         token, 
-        {ttl: 3600,}
+        {ttl: 72000,}
     );
     return {token};
   }
 }
+
+/**jwt守卫 */
+export class LocalAuthGuard extends AuthGuard('local') {
+    canActivate(context: ExecutionContext) {
+      return super.canActivate(context);
+    }
+  
+    handleRequest(err, user, info) {
+        // console.log('err, user, info',err, user, info);
+      if (err || !user) {
+        throw err || new ForbiddenException({
+            message : '没有访问权限!',
+            meta:'请登录账户',
+        });
+      }
+      return user;
+    }
+  }

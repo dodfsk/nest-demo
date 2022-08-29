@@ -3,8 +3,8 @@ import { UserService } from './user.service';
 import { UserController } from './user.controller';
 //ts-ignore
 import { PassportModule } from '@nestjs/passport';
-import { LocalStrategy } from './auth.strategy/local.strategy';
-import { JwtStrategy } from './auth.strategy/jwt.strategy';
+import { LocalStrategy } from '@/common/guard/local.guard';
+import { JwtStrategy } from '@/common/guard/jwt.guard';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 

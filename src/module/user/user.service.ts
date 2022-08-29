@@ -5,16 +5,13 @@ import { ResponseData } from '@/interface/common.interface';
 
 @Injectable()
 export class UserService {
-    userIsNull:ResponseData={
-        message: '无用户信息!',
-        // meta: '请修改用户名',
-        code: 6000,
-        data: {},
-    };
-  constructor(
-    // private configService:ConfigService//configService
-  ) 
-  {}
+  userIsNull: ResponseData = {
+    message: '无用户信息!',
+    // meta: '请修改用户名',
+    code: 6000,
+    data: {},
+  };
+  constructor() {} // private configService:ConfigService//configService
 
   //@Header('Cache-Control', 'none')
   public async login(token: string) {
@@ -38,13 +35,13 @@ export class UserService {
     // validate
     if (res) {
       //   console.log("该用户已注册");
-       const response:ResponseData={
+      const response: ResponseData = {
         message: '该用户已注册!',
         meta: '请修改用户名',
         code: 6000,
         data: {},
       };
-      return response
+      return response;
     } else {
       try {
         //   const password=bcrypt.hashSync(userParam.password, 10)
@@ -52,13 +49,13 @@ export class UserService {
         //save user
         createUser.save();
 
-        const response:ResponseData={
-            message: '注册成功!',
-            // meta: '请修改用户名',
-            code: 6000,
-            data: {},
-          };
-        return response
+        const response: ResponseData = {
+          message: '注册成功!',
+          // meta: '请修改用户名',
+          code: 6000,
+          data: {},
+        };
+        return response;
       } catch (error) {
         throw Error('存入数据库失败' + error);
       }
@@ -67,13 +64,13 @@ export class UserService {
 
   public async findAll(username: string) {
     const res = await UserModel.find();
-        const response:ResponseData={
-            message: '查询成功!',
-            // meta: '请修改用户名',
-            code: 200,
-            data: res,
-        };
-        return response
+    const response: ResponseData = {
+      message: '查询成功!',
+      // meta: '请修改用户名',
+      code: 200,
+      data: res,
+    };
+    return response;
   }
 
   public async findOne(username: string) {
@@ -81,44 +78,52 @@ export class UserService {
       username,
     });
     if (res) {
-        const response:ResponseData={
-            message: '查询成功!',
-            // meta: '请修改用户名',
-            code: 200,
-            data: res,
-          };
-        return response
+      const response: ResponseData = {
+        message: '查询成功!',
+        // meta: '请修改用户名',
+        code: 200,
+        data: res,
+      };
+      return response;
     } else {
-        return this.userIsNull
+      return this.userIsNull;
     }
   }
 
   public async update(userInfo: User) {
     if (userInfo.username == undefined || null) {
-        return this.userIsNull
+      return this.userIsNull;
     }
     const res = await UserModel.findOneAndUpdate(
-      {
-        username: userInfo.username,
-      },
+      { username: userInfo.username },
       userInfo,
     );
-    const response:ResponseData={
+    if (res) {
+      const response: ResponseData = {
         message: '修改成功!',
         // meta: '请修改用户名',
         code: 200,
         data: res,
       };
-    return response
+      return response;
+    }
   }
 
   public async remove(username: string) {
     if (username == undefined) {
-        return this.userIsNull
+      return this.userIsNull;
     }
     const res = await UserModel.findOneAndDelete({
       username,
     });
-    return res;
+    if (res) {
+      const response: ResponseData = {
+        message: '删除成功!',
+        // meta: '请修改用户名',
+        code: 200,
+        data: res,
+      };
+      return response;
+    } else return this.userIsNull;
   }
 }

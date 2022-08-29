@@ -2,7 +2,9 @@ import { Controller,Get,Post,Body,Req, HttpCode, Patch, Param, Delete, Query,Use
 import { ApiBearerAuth, ApiOperation, ApiTags } from "@nestjs/swagger";
 import { UserService } from './user.service';
 import { User } from "@/interface/user.interface";
-import { AuthGuard } from '@nestjs/passport';
+import { LocalAuthGuard } from '@/common/guard/local.guard';
+import { JwtAuthGuard } from '@/common/guard/jwt.guard';
+import { UserInfo } from '@/common/decorater/user.decorater';
 
 @Controller('user')
 @ApiTags("用户模块")
@@ -11,7 +13,7 @@ export class UserController {
 
   @Post('login')
   @HttpCode(200)
-  @UseGuards(AuthGuard('local'))
+  @UseGuards(LocalAuthGuard)
   @ApiOperation({
     summary: "用户登录",
   })
@@ -32,36 +34,21 @@ export class UserController {
     return await this.userService.register(userInfo);
   }
 
-
-  @Get()
-  @UseGuards(AuthGuard('jwt'))
-  @ApiBearerAuth()
-  async findAll(@Query('id') username?: string) {
-    if(username!=undefined){
-        return await this.userService.findOne(username);
-    }
-    return await this.userService.findAll(username);
-  }
-
   @Get(':id')
-  @UseGuards(AuthGuard('jwt'))
+  @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  async findOne(@Param('id') username: string) {
+  async findOne(@Param('id') username: string,@UserInfo() userInfo:User) {
     return await this.userService.findOne(username);
   }
 
   @Patch()
+  @UseGuards(JwtAuthGuard)
   @HttpCode(200)
   @ApiOperation({
     summary: "用户修改",
   })
   async update(@Body()  userInfo: User) {
     return await this.userService.update(userInfo);
-  }
-
-  @Delete()
-  async delete(@Query('id') username: string) {
-    return await this.userService.remove(username);
   }
 
   @Delete(':id')
