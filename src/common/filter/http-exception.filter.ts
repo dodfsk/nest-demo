@@ -1,4 +1,4 @@
-import { ResponseData } from '@/interface/common.interface';
+import { ResponseData } from '@/interface/common';
 import {
   ArgumentsHost,
   Catch,

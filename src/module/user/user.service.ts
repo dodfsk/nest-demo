@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { User, UserModel } from '@/interface/user.interface';
 // import { ConfigService } from '@nestjs/config'
-import { ResponseData } from '@/interface/common.interface';
+import { ResponseData } from '@/interface/common';
 
 @Injectable()
 export class UserService {
@@ -12,20 +12,6 @@ export class UserService {
     data: {},
   };
   constructor() {} // private configService:ConfigService//configService
-
-  //@Header('Cache-Control', 'none')
-  public async login(token: string) {
-    // validate
-    const response: ResponseData = {
-      message: '登录成功',
-      meta: '账户验证通过',
-      code: 200,
-      data: {
-        token,
-      },
-    };
-    return response;
-  }
 
   public async register(userParam: User) {
     const { username } = userParam;
@@ -52,7 +38,7 @@ export class UserService {
         const response: ResponseData = {
           message: '注册成功!',
           // meta: '请修改用户名',
-          code: 6000,
+          code: 200,
           data: {},
         };
         return response;

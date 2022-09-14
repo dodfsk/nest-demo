@@ -1,6 +1,7 @@
 import { Prop, getModelForClass, modelOptions } from '@typegoose/typegoose';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { hashSync } from 'bcryptjs';
+import { Role } from '@/common/enums/role.enum';
 
 //用户表结构
 //@Prop定义表结构相关
@@ -35,12 +36,15 @@ export class User {
   })
   public password: string;
 
-  @Prop()
+  @Prop({
+    default:()=>'user'
+  })
   @ApiPropertyOptional({
     description: '角色权限',
     example: 'root',
   })
-  public role?: string;
+//   public role?: string;
+  public role?: Role;
 
   @Prop()
   @ApiPropertyOptional({

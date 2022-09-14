@@ -3,6 +3,8 @@ import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { StrategyOptions, Strategy, ExtractJwt } from 'passport-jwt';
 import { User, UserModel } from '@/interface/user.interface';
 import { Cache } from 'cache-manager';
+import { Reflector } from '@nestjs/core';
+import { PUBLIC_FLAG } from '../decorater/public.decorater';
 /**jwt策略 */
 export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
   constructor(
@@ -25,11 +27,11 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 
     const headersToken:string = req.headers['authorization'].split(' ')[1];
     const redisToken=await this.cacheManage.get<string>(payload._id)
-    console.log(
-        'redis中的token-',redisToken
-    );
+    //console.log(
+    //    'redis中的token-',redisToken
+    //);
     if(headersToken==redisToken){
-        console.log('redis缓存通过');
+        console.log('redis缓存验证通过');
         return user;
     }
     else{
@@ -42,8 +44,19 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
 }
 /**jwt守卫 */
 export class JwtAuthGuard extends AuthGuard('jwt') {
+    constructor(private reflector: Reflector){
+        super()
+    }
     canActivate(context: ExecutionContext) {
         // console.log('context',context.switchToHttp().getResponse());
+        //获取meta信息,公开接口不做校验
+        const isPublic = this.reflector.getAllAndOverride<boolean>(PUBLIC_FLAG, [
+            context.getHandler(),
+            context.getClass(),
+        ]);
+        if (isPublic) {
+            return true;
+        }
       return super.canActivate(context);
     }
   

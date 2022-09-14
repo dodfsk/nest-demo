@@ -3,7 +3,7 @@ import { AuthGuard, PassportStrategy } from '@nestjs/passport';
 import { IStrategyOptions, Strategy } from 'passport-local';
 import { compareSync } from 'bcryptjs';
 import { UserModel } from '@/interface/user.interface';
-import { ResponseData } from '@/interface/common.interface';
+import { ResponseData } from '@/interface/common';
 import { JwtService } from '@nestjs/jwt';
 import {Cache} from 'cache-manager';
 
@@ -28,7 +28,8 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
         message: '登录失败!',
         meta: '用户名不正确',
         code: 6000,
-      }
+        data:{}
+    }
       throw new ForbiddenException(response);
     }
     console.log(password, userInfo.password);
@@ -38,6 +39,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
             message: '登录失败!',
             meta: '密码错误',
             code: 6000,
+            data:{}
         }
       throw new ForbiddenException(response);
     }
@@ -47,13 +49,13 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     const value = await this.cacheManage.set(
         _id, 
         token, 
-        {ttl: 72000,}
+        {ttl: 72000}
     );
     return {token};
   }
 }
 
-/**jwt守卫 */
+/**local-auth守卫 */
 export class LocalAuthGuard extends AuthGuard('local') {
     canActivate(context: ExecutionContext) {
       return super.canActivate(context);

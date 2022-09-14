@@ -10,6 +10,8 @@ import { UserController } from './module/user/user.controller';
 import { UserModule } from './module/user/user.module';
 import { RoomModule } from './module/room/room.module';
 import { RoomController } from './module/room/room.controller';
+import { UploadModule } from './module/upload/upload.module';
+import { AuthModule } from './module/auth/auth.module';
 
 
 @Module({
@@ -28,7 +30,7 @@ import { RoomController } from './module/room/room.controller';
     }),//缓存模块 全局
 	DbModule, 
 	UserModule, 
-    RoomModule, 
+    RoomModule, UploadModule, AuthModule, 
 ],
   controllers: [
     AppController, 

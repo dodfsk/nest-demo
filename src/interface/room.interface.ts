@@ -67,6 +67,15 @@ export class Room {
   public from: string;
 
   @Prop({
+    default:()=>true
+  })
+  @ApiProperty({
+    description: "是否公开(默认公开)",
+    example: "true--false",
+  })
+  public isPublic:boolean;
+
+  @Prop({
     default:()=>new Date()
   })
   @ApiProperty({
