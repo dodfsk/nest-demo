@@ -18,7 +18,7 @@ async function bootstrap() {
   app.enableCors();
   app.useGlobalFilters(new HttpExceptionFilter()); //全局过滤器
   app.use(json({ limit: '5mb' })); //json大小限制
-  app.useStaticAssets(join(__dirname, 'assets'), { prefix: '/assets' });//访问静态资源路径
+//   app.useStaticAssets(join(__dirname, 'assets'), { prefix: '/assets' });//访问静态资源路径
   app.useGlobalGuards(new JwtAuthGuard(new Reflector()))//全局使用jwt守卫,Public装饰器为公开接口
 
   //swagger config↓

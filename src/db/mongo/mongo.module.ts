@@ -3,8 +3,8 @@ import { mongoose } from "@typegoose/typegoose";
 
 const providers:Provider[]=[
     {
-        provide:'DB_CONNECTION',
-        useFactory: () => mongoose.connect(process.env.DB),
+        provide:'MONGO_CONNECTION',
+        useFactory: () => mongoose.connect(process.env.MONGO_DB),
     },
 ]
 
@@ -14,4 +14,4 @@ const providers:Provider[]=[
     exports:providers,
 
 })
-export class DbModule {}
+export class MongoModule {}

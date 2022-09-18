@@ -22,7 +22,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
    * 
    */
   async validate(req,payload: any) {
-    console.log(`jwt策略被守卫调用一级验证-通过`, payload);
+    console.log(`jwt策略一级验证-通过`, payload._id);
     const user = await UserModel.findById(payload);
 
     const headersToken:string = req.headers['authorization'].split(' ')[1];
@@ -31,7 +31,7 @@ export class JwtStrategy extends PassportStrategy(Strategy, 'jwt') {
     //    'redis中的token-',redisToken
     //);
     if(headersToken==redisToken){
-        console.log('redis缓存验证通过');
+        console.log('redis缓存二级验证-通过');
         return user;
     }
     else{
