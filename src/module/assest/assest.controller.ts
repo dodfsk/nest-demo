@@ -8,7 +8,7 @@ import * as mime from 'mime'
 export class AssestController {
   constructor(private readonly assestService: AssestService) {}
 
-  @Get('picture/:user/:file')
+  @Get(':bucket/:user/:file')
   @Public()
   @HttpCode(200)
   getFile(@Param() param,@Res({passthrough:true}) res) {
@@ -19,7 +19,7 @@ export class AssestController {
     res.set({
         'Content-Type': `${mimeType}`,//设置mime内容类型
         // 'Content-Disposition': 'inline; filename='+param.file,
-        });
+    });
     return this.assestService.findOne(param);
 }
 

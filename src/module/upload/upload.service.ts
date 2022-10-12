@@ -1,65 +1,71 @@
 import { UserInfo } from '@/common/decorater/user.decorater';
 import { MinioService } from '@/db/minio/minio.service';
+import { ResponseData } from '@/interface/common';
 import { Injectable } from '@nestjs/common';
-import { Blob } from 'buffer';
 
 @Injectable()
 export class UploadService {
-    constructor(private readonly minioService:MinioService){}
-
-async create(body,file,userInfo:UserInfo) {
+  constructor(private readonly minioService: MinioService) {}
+  //后端中转上传
+  async upload(body, userInfo: UserInfo, file) {
     console.log(file);
-    const { bucketName }=body
-    const isExist=await this.minioService.bucketExists(bucketName)
-    console.log(bucketName,isExist);
-    if(!isExist){
-        this.minioService.makeBucket(bucketName)
+    const { bucketName } = body;
+    const isExist = await this.minioService.bucketExists(bucketName);
+    console.log(bucketName, isExist);
+    if (!isExist) {
+      this.minioService.makeBucket(bucketName);
     }
-    const objectName=`${userInfo.username}/${file.originalname}`
-    const res=this.minioService.putObject(bucketName,objectName,file.buffer,file.size)
-    return res;
+    const objectName = `${userInfo.username}/${file.originalname}`;
+    const res = await this.minioService.putObject(
+      bucketName,
+      objectName,
+      file.buffer,
+      file.size,
+    );
+    if (!res) {
+      return {
+        code: 6000,
+        message: '上传失败',
+        data: {},
+      };
+    }
+    const response: ResponseData = {
+      code: 200,
+      message: '上传成功',
+      data: { url: res },
+    };
+    return response;
   }
-
-  async findAll() {
-    // this.minioService.init()
-    const res=await this.minioService.makeBucket('test2')
-    return res;
-  }
-
-  async findOne(body,userInfo:UserInfo) {
+  //预签名直传
+  async getUploadUrl(body, userInfo: UserInfo) {
     console.log(body);
+    //参数为桶名和文件名
+    const { bucketName,fileName } = body;
+
+    const isExist = await this.minioService.bucketExists(bucketName);
+    if (!isExist) {
+      this.minioService.makeBucket(bucketName);
+    }
     
-    const { bucketName }=body
-    // const isExist=await this.minioService.bucketExists(bucketName)
-    // if(!isExist){
-    //     this.minioService.makeBucket(bucketName)
-    // }
-    const objectName=`${userInfo.username}/${body.objectName}`
-    const res=await this.minioService.getObject(bucketName,objectName)
-    const buf:any=res as Buffer
-    // const abuf=Uint8Array.from(buf).buffer;
-    // const binbuf=Buffer.from(buf,'binary')
+    const objectName = `${userInfo.username}/${fileName}`;
+    const res = await this.minioService.presignedPutObject(
+      bucketName,
+      objectName,
+    );
+    console.log(res);
+    if (!res) {
+      return {
+        code: 6000,
+        message: '获取上传签名失败',
+        data: {},
+      };
+    }
 
-    console.log('buf',buf.buffer);
-    // const length=buf.length
-    // const buffer=new ArrayBuffer(length)
-    // const view=new Uint8Array(buffer)
-    // for(let i=0;i<length;i++){
-    //     view[i]=buf.data[i]
-    // }
-
-    const blob=new Blob([buf.buffer])
-    console.log(buf);
-    console.log(res,blob);
-
-    return blob;
-  }
-
-  update(id: number, updateUploadDto) {
-    return `This action updates a #${id} upload`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} upload`;
+    const response: ResponseData = {
+      code: 200,
+      message: '获取直传url成功',
+      data: { url: res },
+    };
+    return response;
   }
 }

@@ -48,7 +48,7 @@ export class UserService {
     }
   }
 
-  public async findAll(username: string) {
+  public async findAll() {
     const res = await UserModel.find();
     const response: ResponseData = {
       message: '查询成功!',
@@ -59,9 +59,9 @@ export class UserService {
     return response;
   }
 
-  public async findOne(username: string) {
+  public async findOne(uname: string) {
     const res = await UserModel.findOne({
-      username,
+        username:uname,
     });
     if (res) {
       const response: ResponseData = {
@@ -76,13 +76,16 @@ export class UserService {
     }
   }
 
-  public async update(userInfo: User) {
-    if (userInfo.username == undefined || null) {
+  public async update(uname:string,userParam: User) {    
+    if (!userParam.username||!uname) {
       return this.userIsNull;
     }
+    let { username, password,role,createdAt, ...updateParam } = userParam;
+    updateParam.updateAt=new Date()//解构出可更新字段的对象
+    
     const res = await UserModel.findOneAndUpdate(
-      { username: userInfo.username },
-      userInfo,
+      { username: uname },
+      updateParam,
     );
     if (res) {
       const response: ResponseData = {
@@ -95,12 +98,12 @@ export class UserService {
     }
   }
 
-  public async remove(username: string) {
-    if (username == undefined) {
+  public async remove(uname: string) {
+    if (uname == undefined) {
       return this.userIsNull;
     }
     const res = await UserModel.findOneAndDelete({
-      username,
+        username:uname,
     });
     if (res) {
       const response: ResponseData = {

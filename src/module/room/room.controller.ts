@@ -43,6 +43,8 @@ export class RoomController {
 
   @Delete(':id')
   @HttpCode(200)
+  @Roles('root')
+  @UseGuards(RolesGuard)
   async delete(@Param('id') id: string,@UserInfo() userInfo:UserInfo) {
     return await this.roomService.delete(id,userInfo);
   }

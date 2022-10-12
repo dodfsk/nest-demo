@@ -68,6 +68,15 @@ export class User {
   public birth?: Date;
 
   @Prop()
+  @ApiPropertyOptional({
+    description: '头像地址',
+    example: 'oss/user/avatar.png',
+  })
+  public avatar?: string;
+
+  @Prop({
+    default:()=>new Date()
+  })
   @ApiProperty({
     description: '注册时间',
     example: Date.now(),

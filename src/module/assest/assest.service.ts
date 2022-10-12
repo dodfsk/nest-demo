@@ -7,13 +7,13 @@ export class AssestService {
 
     async findOne(param) {
         console.log(param);
-        
-        const isExist=await this.minioService.bucketExists('picture')
+        const { bucket,user,file }=param//存储桶名,用户名,文件名
+        const isExist=await this.minioService.bucketExists(bucket)
         if(!isExist){
-            this.minioService.makeBucket('picture')
+            this.minioService.makeBucket(bucket)
         }
-        const objectName=`${param.user}/${param.file}`
-        const res=await this.minioService.getObject('picture',objectName)
+        const objectName=`${user}/${file}`
+        const res=await this.minioService.getObject(bucket,objectName)
         const buf:any=res as Buffer
         // const buf64=buf.toString('base64')
         // const base64="data:image/png;base64,"+buf64

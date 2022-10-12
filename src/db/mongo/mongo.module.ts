@@ -4,7 +4,7 @@ import { mongoose } from "@typegoose/typegoose";
 const providers:Provider[]=[
     {
         provide:'MONGO_CONNECTION',
-        useFactory: () => mongoose.connect(process.env.MONGO_DB),
+        useFactory: () => mongoose.connect(process.env.MONGO_DB)
     },
 ]
 

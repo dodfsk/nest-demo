@@ -19,17 +19,17 @@ export class UserController {
   @ApiOperation({
     summary: "用户注册",
   })
-  async register(@Body() userInfo: User) {
-    return await this.userService.register(userInfo);
+  async register(@Body() userParam: User) {
+    return await this.userService.register(userParam);
   }
 
   @Get(':id')
   @HttpCode(200)
-  @Roles('root')
-  @UseGuards(RolesGuard)
+//   @Roles('root')
+//   @UseGuards(RolesGuard)
   @ApiBearerAuth()
-  async findOne(@Param('id') username: string,@UserInfo() userInfo:User) {
-    return await this.userService.findOne(username);
+  async findOne(@Param('id') uname: string,@UserInfo() userInfo:User) {
+    return await this.userService.findOne(uname);
   }
 
   @Patch(':id')
@@ -39,8 +39,8 @@ export class UserController {
   @ApiOperation({
     summary: "用户修改",
   })
-  async update(@Body()  userInfo: User) {
-    return await this.userService.update(userInfo);
+  async update(@Param('id') uname: string,@Body()  userParam: User) {
+    return await this.userService.update(uname,userParam);
   }
 
   @Delete(':id')
@@ -50,8 +50,8 @@ export class UserController {
   @ApiOperation({
     summary: "销毁账号",
   })
-  async remove(@Param('id') username: string) {
-    return await this.userService.remove(username);
+  async remove(@Param('id') uname: string) {
+    return await this.userService.remove(uname);
   }
 
 }
