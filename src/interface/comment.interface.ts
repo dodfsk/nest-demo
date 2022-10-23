@@ -42,6 +42,7 @@ export class Reply {
   public updateAt?: Date;
 }
 
+//一级评论区
 @modelOptions({
   schemaOptions: { collection: 'comment' },
 })

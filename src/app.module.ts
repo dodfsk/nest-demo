@@ -13,7 +13,7 @@ import { UploadModule } from './module/upload/upload.module';
 import { AuthModule } from './module/auth/auth.module';
 import { MinioModule } from './db/minio/minio.module';
 import { RedisModule } from './db/redis/redis.module';
-import { AssestModule } from './module/assest/assest.module';
+import { AssetsModule } from './module/assets/assets.module';
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { AssestModule } from './module/assest/assest.module';
     RoomModule,
     UploadModule,
     AuthModule,
-    AssestModule,
+    AssetsModule,
   ],
   controllers: [AppController, UserController, RoomController],
   providers: [AppService],

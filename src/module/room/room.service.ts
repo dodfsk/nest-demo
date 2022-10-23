@@ -65,15 +65,19 @@ export class RoomService {
   }
 
   public async update(roomParam: Room, userInfo: UserInfo) {
-    if (roomParam.hid == undefined || null) {
-      return this.roomIsNull;
-    }
-    let { hid, from, createdAt, ...updateParam } = roomParam;
-    updateParam.updateAt = new Date();
-    const res = await RoomModel.findOneAndUpdate({ hid }, updateParam).select(
-      '+content',
-    );
+    try{
+        if (roomParam.hid == undefined || null) {
+        return this.roomIsNull;
+        }
+        let { hid, from, createdAt, ...updateParam } = roomParam;
+        updateParam.updateAt = new Date();
+        const res = await RoomModel.findOneAndUpdate({ hid }, updateParam).select(
+        '+content',
+        );
     return { message: '修改成功', code: 200, data: res };
+    } catch (error) {
+        throw Error('更新room失败' + error);
+    }
   }
 
   public async delete(hid: string, userInfo: UserInfo) {

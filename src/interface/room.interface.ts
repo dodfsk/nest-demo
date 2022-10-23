@@ -1,11 +1,30 @@
-import { Prop,getModelForClass, modelOptions } from "@typegoose/typegoose";
+import { Prop,getModelForClass, modelOptions, Severity } from "@typegoose/typegoose";
 import { ApiProperty,ApiPropertyOptional } from "@nestjs/swagger";
 import { customAlphabet } from "nanoid";
 //资源表结构
 const alphabet='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
 const nanoid=customAlphabet(alphabet,10)//0~9,a~z,A~Z(去除-和_)  10位数
 
+
+export class AssetsList {
+    @Prop({ required: true })
+    @ApiProperty({
+      description: '发布者username',
+      example: '文件路径',
+    })
+    public url: string;
+
+    @Prop({ required: true })
+    @ApiProperty({
+      description: '内容',
+      example: '文件名',
+    })
+    public fileName: string;
+  
+}
+
 @modelOptions({ 
+    options:{allowMixed:Severity.ALLOW},
     schemaOptions: { collection: 'room' },
  })
 export class Room {
@@ -55,7 +74,7 @@ export class Room {
     description: "静态资源地址",
     example: "这是一个静态资源地址",
   })
-  public assets?: string;
+  public assets?: AssetsList[];
   
   @Prop({
     required:true

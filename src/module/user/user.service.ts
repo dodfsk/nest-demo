@@ -43,7 +43,7 @@ export class UserService {
         };
         return response;
       } catch (error) {
-        throw Error('存入数据库失败' + error);
+        throw Error('注册失败(存入数据库失败)' + error);
       }
     }
   }
@@ -77,24 +77,28 @@ export class UserService {
   }
 
   public async update(uname:string,userParam: User) {    
-    if (!userParam.username||!uname) {
-      return this.userIsNull;
-    }
-    let { username, password,role,createdAt, ...updateParam } = userParam;
-    updateParam.updateAt=new Date()//解构出可更新字段的对象
-    
-    const res = await UserModel.findOneAndUpdate(
-      { username: uname },
-      updateParam,
-    );
-    if (res) {
-      const response: ResponseData = {
-        message: '修改成功!',
-        // meta: '请修改用户名',
-        code: 200,
-        data: res,
-      };
-      return response;
+    try{
+        if (!userParam.username||!uname) {
+        return this.userIsNull;
+        }
+        let { username, password,role,createdAt, ...updateParam } = userParam;
+        updateParam.updateAt=new Date()//解构出可更新字段的对象
+        
+        const res = await UserModel.findOneAndUpdate(
+        { username: uname },
+        updateParam,
+        );
+        if (res) {
+        const response: ResponseData = {
+            message: '修改成功!',
+            // meta: '请修改用户名',
+            code: 200,
+            data: res,
+        };
+        return response;
+        }
+    } catch (error) {
+        throw Error('修改用户失败' + error);
     }
   }
 
