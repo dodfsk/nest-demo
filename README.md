@@ -1,73 +1,73 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
+# NestJS Demo
+大体上是一个论坛系统的后端
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+本项目是由官方nestjs/cli开始从头构建,边写边学Node后端的产物。因为没有明确目标,所以一直在改需求和逻辑,寻找更优解。
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+
 
 ## Description
+<p align="center">
+  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="68" alt="Nest Logo" /></a>
+  <a href="http://nestjs.com/" target="blank"><img src="https://github.com/mongodb/mongo/raw/master/docs/leaf.svg" width="42" alt="Mongo Logo" /></a>
+  <a href="http://nestjs.com/" target="blank"><img src="https://raw.githubusercontent.com/minio/minio/master/.github/logo.svg" width="142" height="70px" alt="Minio Logo" /></a>
+</p>
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+##### 相关技术栈:
+    基础框架:nestjs
+    数据库:mongoDB
+    ORM框架:typegoose
+    缓存:redis
+    对象存储:minio
+    权限安全:bcryptjs passport-jwt passport-local
+
+##### 目录:
+    ────src
+        ├── common      #装饰器、守卫、拦截器、过滤器、工具函数等
+        ├── config      #全局配置
+        ├── db          #数据库连接相关
+        ├── interface   #存放数据库schema和ts类型
+        └── module      #业务功能模块
+
+##### 功能介绍:
+除了实现了用户，文章，评论基本的增删改查,还有以下
+
+权限安全相关：
+
+    1. 用户注册使用bcryptjs对密码进行盐加密
+    2. 用户登陆使用passport-local守卫策略,比对数据库中bcrypt加密后的密码,比对通过后将用户信息交给jwt生成token并存入redis进行缓存
+    3. 没有@Public公共装饰器的接口都会通过jwt守卫,先经过jwt的一级验证,再比对redis缓存的最新登陆的token,实现单设备登陆。
+    4. 通过jwt守卫的接口将获得token中对应的用户信息,为接口中的业务逻辑提供身份判定
+
+接口相关:
+
+    1. 用拦截器统一返回类型,该Response Type跟前端共享(res.data)
+    2. 用异常过滤器捕获throw出的各种不同类型的异常,并统一外层code(res)为200,将业务code封入Response(res.data)内
+    3. 使用mongoose的populate填充引入其他表的信息,比如from字段填入用户表信息
+
+
+对象存储相关:
+
+    1. 使用前端直传,对域名前缀使用正则替换的方案
+    2. 在业务接口中对所有涉及文章封面cover,内容content,用户头像avatar字段的接口进行正则替换
+    3. 考虑添加图片处理服务中间件,类似阿里云oss的图片处理服务
+
 
 ## Installation
 
 ```bash
-$ npm install
+$ yarn install
 ```
 
 ## Running the app
 
 ```bash
 # development
-$ npm run start
+$ yarn start
 
 # watch mode
-$ npm run start:dev
+$ yarn nest
 
 # production mode
-$ npm run start:prod
+$ yarn build
+$ yarn start:prod
 ```
-
-## Test
-
-```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
-```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).

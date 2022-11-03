@@ -3,29 +3,34 @@ import { AppModule } from './app.module';
 //swagger
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 import * as session from 'express-session';
-import { HttpExceptionFilter } from './common/filter/http-exception.filter';
 import { join } from 'path';
 import { json } from 'body-parser';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import { JwtAuthGuard } from './common/guard/jwt.guard';
-
+import { HttpExceptionFilter } from './common/filter/http-exception.filter';
+import { Response } from '@/common/interceptor/response';
 
 const listenPort = 13573;
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
   app.setGlobalPrefix('api');
-  app.enableCors();
+  app.enableCors({
+    // allowedHeaders:['content-type'],
+    // origin:'http://192.168.2.107:3000',
+    // credentials:true,
+  });
   app.useGlobalFilters(new HttpExceptionFilter()); //全局过滤器
   app.use(json({ limit: '5mb' })); //json大小限制
 //   app.useStaticAssets(join(__dirname, 'assets'), { prefix: '/assets' });//访问静态资源路径
   app.useGlobalGuards(new JwtAuthGuard(new Reflector()))//全局使用jwt守卫,Public装饰器为公开接口
+  app.useGlobalInterceptors(new Response())
 
   //swagger config↓
   const config = new DocumentBuilder()
     .setTitle('NestJs Api') //标题
-    .setDescription('NestJs项目测试') //描述
-    .setVersion('1.0') //版本
+    .setDescription('NestJs项目Demo') //描述
+    .setVersion('1.1') //版本
     .addBearerAuth()
     // .addTag("cats")
     .build();

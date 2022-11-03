@@ -2,7 +2,7 @@ import { Injectable, CanActivate, ExecutionContext, ForbiddenException } from '@
 import { Reflector } from '@nestjs/core';
 import { Role } from '@/interface/common';
 import { ROLES_KEY } from '@/common/decorater/roles.decorater';
-import { User } from "@/interface/user.interface";
+import { UserInfo } from '@/common/decorater/user.decorater'
 
 @Injectable()
 export class RolesGuard implements CanActivate {
@@ -17,17 +17,15 @@ export class RolesGuard implements CanActivate {
       return true;
     }
     
-    const { user,body }:{user:User,body:any} = context.switchToHttp().getRequest();
+    const { user,body }:{user:UserInfo,body:any} = context.switchToHttp().getRequest();
     console.log(user,body)
 
-    const userOwn=user.username==body.username
-    const roomOwn=user.username==body.from
+    // const isOwn=user._id==body.from._id////无法保证body中_id的有效性,待修改----已废弃
 
-    const isOwn=userOwn||roomOwn
     const isAuthorization=requiredRoles.includes(user.role)
     // const isAuthorization=requiredRoles.some((role) => {user.role?.includes(role)});
-    console.log('roles守卫状态-isOwn,isAllowed',isOwn,isAuthorization);
-    const isAllowed=isOwn||isAuthorization
+    console.log('roles守卫状态-isAllowed',isAuthorization);
+    const isAllowed=isAuthorization
     if(isAllowed){
         return true
     }

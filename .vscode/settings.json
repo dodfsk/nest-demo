@@ -1,35 +1,34 @@
 {
-	"git.confirmSync": false,
-	"terminal.integrated.fontSize": 13,
-	"vetur.format.options.tabSize": 4,
-	"vetur.format.options.useTabs": true,
-	"eslint.packageManager": "yarn",
-    "prettier.tabWidth": 4,
-	"[javascript]": {
-		"editor.defaultFormatter": "vscode.typescript-language-features"
-	},
-	"volar.codeLens.scriptSetupTools": true,
-	"volar.icon.vite": false,
-	"[vue]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"editor.detectIndentation": false,
-	"volar.takeOverMode.enabled": false,
-	"javascript.format.enable": false,
-	"typescript.format.enable": false,
-	"vetur.validation.script": false,
+    "workbench.colorTheme": "Default Dark+",
+    "editor.fontLigatures": false,
 
-	"terminal.integrated.fontFamily": "monospace",
-	"git.suggestSmartCommit": false,
-	"git.ignoreRebaseWarning": true,
+    "git.confirmSync": false,
+    "terminal.integrated.fontSize": 12,
+    "vetur.format.options.tabSize": 4,
+    "vetur.format.options.useTabs": true,
+    "eslint.packageManager": "yarn",
+    "prettier.tabWidth": 4,
+    "[javascript]": {
+        "editor.defaultFormatter": "vscode.typescript-language-features"
+    },
+    "volar.codeLens.scriptSetupTools": true,
+    "volar.icon.vite": false,
+    "[vue]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "editor.detectIndentation": false,
+    "volar.takeOverMode.enabled": false,
+    "javascript.format.enable": false,
+    "typescript.format.enable": false,
+    "vetur.validation.script": false,
+    "git.suggestSmartCommit": false,
+    "git.ignoreRebaseWarning": true,
     "editor.formatOnSave": false,
     "[jsonc]": {
         "editor.defaultFormatter": "vscode.json-language-features"
     },
     "editor.fastScrollSensitivity": 1,
     "workbench.list.fastScrollSensitivity": 1,
-    "editor.codeActionsOnSave": {
-    },
     "terminal.integrated.fastScrollSensitivity": 1,
     "[json]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -40,9 +39,30 @@
     "prettier.useTabs": true,
     "editor.guides.bracketPairs": "active",
     "prettier.singleQuote": true,
-    "prettier.printWidth": 160,
-    "[dockercompose]": {
-        "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    // "[dockercompose]": {
+    //     "editor.defaultFormatter": "ms-azuretools.vscode-docker"
+    // },
+    "prettier.printWidth": 125,
+    "[less]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "editor.stickyScroll.enabled": true,
+    "volar.doctor.statusBarItem": false,
+    "terminal.integrated.defaultProfile.windows": "Command Prompt",
+    "files.autoSave": "off",
+    "settingsSync.ignoredExtensions": [
+        "github.codespaces",
+        "ms-vscode.anycode-rust"
+    ],
+    "terminal.integrated.fontWeight": "normal",
+    "terminal.integrated.defaultProfile.linux": "bash",
+    "terminal.integrated.fontFamily": "ubuntu",
+    "editor.language.colorizedBracketPairs": [
+    
+    ],
     "prettier.semi": false,
+    "[typescript]": {
+        "editor.defaultFormatter": "esbenp.prettier-vscode"
+    },
+    "prettier.useEditorConfig": false
 }
