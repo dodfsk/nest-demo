@@ -6,7 +6,15 @@ import { Injectable, StreamableFile } from '@nestjs/common';
 @Injectable()
 export class AssetsService {
   constructor(private readonly minioService: MinioService) {}
-
+   //将本地oss预签名的endPoint+端口替换为nginx代理的oss地址
+   preSignReplace=(data:string)=>{
+    const regStr=`${process.env.ORIGI_OSS_MINIO}`
+    const regex=new RegExp(regStr,'g')
+    const nginx:string=process.env.NGINX_OSS_MINIO
+    return data.replace(regex,nginx)
+  }
+  
+  //后端中转下载-废弃
   async findOne(param) {
     console.log(param);
     const { bucket, user, file } = param; //存储桶名,用户名,文件名
@@ -22,7 +30,7 @@ export class AssetsService {
 
     return new StreamableFile(buf);
   }
-  //后端中转上传
+  //后端中转上传-废弃
   async upload(body, userInfo: UserInfo, file) {
     console.log(file);
     const { bucketName } = body;
@@ -52,6 +60,7 @@ export class AssetsService {
     };
     return response;
   }
+
   //预签名直传
   async getUploadUrl(body, userInfo: UserInfo) {
     console.log(body);
@@ -76,11 +85,11 @@ export class AssetsService {
         data: {},
       };
     }
-
+    const preSignUrl:string=this.preSignReplace(res as string)
     const response: ResponseData = {
       code: 200,
       message: '获取直传url成功',
-      data: { url: res },
+      data: { url: preSignUrl },
     };
     return response;
   }

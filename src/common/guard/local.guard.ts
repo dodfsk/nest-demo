@@ -49,7 +49,7 @@ export class LocalStrategy extends PassportStrategy(Strategy, 'local') {
     const value = await this.cacheManage.set(
         _id, 
         token, 
-        {ttl: 72000}
+        // {ttl: 72000}
     );
     return {token};
   }

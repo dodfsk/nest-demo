@@ -1,10 +1,7 @@
 import { Prop,getModelForClass, modelOptions, Severity } from "@typegoose/typegoose";
 import { ApiProperty,ApiPropertyOptional } from "@nestjs/swagger";
-import { customAlphabet } from "nanoid";
+import { nanoid } from "@/common/utils/nanoid";
 //资源表结构
-const alphabet='0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'
-const nanoid=customAlphabet(alphabet,10)//0~9,a~z,A~Z(去除-和_)  10位数
-
 
 export class AssetsList {
     @Prop({ required: true })
@@ -69,7 +66,9 @@ export class Room {
   })
   public cover?: string;
 
-  @Prop()
+  @Prop({
+    select: false,
+  })
   @ApiProperty({
     description: "静态资源地址",
     example: "这是一个静态资源地址",
@@ -86,7 +85,7 @@ export class Room {
   public from: string;
 
   @Prop({
-    default:()=>true
+    default:()=>false
   })
   @ApiProperty({
     description: "是否公开(默认公开)",

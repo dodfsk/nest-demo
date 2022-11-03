@@ -1,10 +1,12 @@
 import { Global, Module,Provider } from "@nestjs/common";
 import { mongoose } from "@typegoose/typegoose";
+import { ConfigService } from '@nestjs/config';
 
 const providers:Provider[]=[
     {
+        inject: [ConfigService], //注入configService
         provide:'MONGO_CONNECTION',
-        useFactory: () => mongoose.connect(process.env.MONGO_DB)
+        useFactory: (config: ConfigService) => mongoose.connect(config.get<string>('MONGO_DB'))
     },
 ]
 

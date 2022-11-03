@@ -17,6 +17,11 @@ export class RoomController {
   async create(@Body() roomParam: Room,@UserInfo() userInfo:UserInfo) {
     return await this.roomService.create(roomParam,userInfo);
   }
+//   @Post('preCreate')
+//   @HttpCode(200)
+//   async preCreate(@Body() roomParam: Room,@UserInfo() userInfo:UserInfo) {
+//     return await this.roomService.preCreate(roomParam,userInfo);
+//   }
 
   @Get()
   @HttpCode(200)
@@ -43,8 +48,8 @@ export class RoomController {
 
   @Delete(':id')
   @HttpCode(200)
-  @Roles('root')
-  @UseGuards(RolesGuard)
+//   @Roles('root')
+//   @UseGuards(RolesGuard)
   async delete(@Param('id') id: string,@UserInfo() userInfo:UserInfo) {
     return await this.roomService.delete(id,userInfo);
   }

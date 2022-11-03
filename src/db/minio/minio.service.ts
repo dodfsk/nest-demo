@@ -14,8 +14,8 @@ export class MinioService {
   init() {
     this.minioClient = new Minio.Client({
       ...this.options,
-      endPoint: this.config.get<string>('LOCAL_LAN'),
-    //   endPoint: '127.0.0.1',
+      endPoint: this.config.get<string>('MINIO_END_POINT'),
+      //   endPoint: '127.0.0.1',
       accessKey: 'root',
       secretKey: 'Aa123456',
       port: 9000,
