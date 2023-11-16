@@ -63,7 +63,16 @@ export class CommentStats {
     description: '点赞数',
     example: 0,
   })
-  public like: number
+  public likes: number
+
+//   @Prop({
+//     default: 0,
+//   })
+//   @ApiProperty({
+//     description: '总引用数',
+//     example: 0,
+//   })//每次被回复+1,并且当时的总回复数为该条回复的楼层数
+//   public replys: number
 
 }
 

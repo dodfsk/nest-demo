@@ -11,22 +11,31 @@ export interface ChangePasswordType {
 //数据统计表
 export class UserStats {
   @Prop({
-    default: () => 0,
+    default: 0,
   })
   @ApiProperty({
     description: '关注数',
     example: 0,
   })
-  public follow?: number
+  public follows: number
 
   @Prop({
-    default: () => 0,
+    default: 0,
+  })
+  @ApiProperty({
+    description: '关注者数量',
+    example: 0,
+  })
+  public fans: number
+
+  @Prop({
+    default: 0,
   })
   @ApiProperty({
     description: '发帖数',
     example: 0,
   })
-  public push?: number
+  public rooms: number
 }
 //用户表结构
 //@Prop定义表结构相关
@@ -133,8 +142,9 @@ export class User {
   @ApiProperty({
     description: '统计表',
     example: '统计各种数据',
+    default: {},
   })
-  public stats?: UserStats
+  public stats: UserStats
 
   @Prop({
     default: () => new Date(),

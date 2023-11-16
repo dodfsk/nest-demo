@@ -81,19 +81,21 @@ export class UserController {
   @HttpCode(200)
   //   @Roles('root')
   //   @UseGuards(RolesGuard)
-//   @ApiBearerAuth()
+  //   @ApiBearerAuth()
   async findOne(@Param('id') uid: string, @UserInfo() userInfo: UserInfo) {
     return await this.userService.findOne(uid)
   }
 
-  //---以下为root权限接口
+  ///////////////////////////
+  //---以下为root权限接口---//
+  //////////////////////////
   @Get()
   @HttpCode(200)
   @Roles('root')
   @UseGuards(RolesGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: '获取全部用户信息',
+    summary: 'ROOT:获取全部用户信息',
   })
   async findAll(@Query() query) {
     return await this.userService.findAll(query)
@@ -105,7 +107,7 @@ export class UserController {
   @UseGuards(RolesGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: '用户修改',
+    summary: 'ROOT:用户修改',
   })
   async update(@Param('id') uid: string, @Body() userParam: User) {
     return await this.userService.update(uid, userParam)
@@ -117,7 +119,7 @@ export class UserController {
   @UseGuards(RolesGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: '账号销毁',
+    summary: 'ROOT:账号销毁',
   })
   async remove(@Param('id') uid: string) {
     return await this.userService.remove(uid)

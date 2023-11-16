@@ -33,8 +33,17 @@ export class RoomStats {
   @ApiProperty({
     description: '点赞数',
     example: 0,
+  })//每次被点赞+1,并且当时的总回复数为该条回复的楼层数
+  public likes: number
+
+  @Prop({
+    default: 0,
   })
-  public like: number
+  @ApiProperty({
+    description: '总收藏数',
+    example: 0,
+  })//每次被收藏+1,并且当时的总回复数为该条回复的楼层数
+  public stars: number
 
   @Prop({
     default: 0,
@@ -42,8 +51,8 @@ export class RoomStats {
   @ApiProperty({
     description: '查看数',
     example: 0,
-  })
-  public view: number
+  })//每次被查看+1,并且当时的总回复数为该条回复的楼层数
+  public views: number
 
   @Prop({
     default: 0,
@@ -52,7 +61,9 @@ export class RoomStats {
     description: '总回复数',
     example: 0,
   })//每次被回复+1,并且当时的总回复数为该条回复的楼层数
-  public reply: number
+  public floors: number
+
+  
 }
 
 @modelOptions({
@@ -103,7 +114,7 @@ export class Room {
     description: '简介',
     example: '这是一个简介',
   })
-  public intro?: string
+  public desc?: string
 
   @Prop()
   @ApiPropertyOptional({

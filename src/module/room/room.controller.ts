@@ -38,10 +38,10 @@ export class RoomController {
   @HttpCode(200)
   @Public()
   @ApiOperation({
-    summary: '获取全部帖子',
+    summary: '获取帖子列表',
   })
-  async findAll(@Query() query) {
-    return await this.roomService.findAll(query)
+  async findList(@Query() query) {
+    return await this.roomService.findList(query)
   }
 
   @Post('getMyList')
@@ -101,6 +101,18 @@ export class RoomController {
     summary: '删除帖子',
   })
   async delete(@Param('id') id: string, @UserInfo() userInfo: UserInfo) {
-    return await this.roomService.delete(id, userInfo)
+    return await this.roomService.remove(id, userInfo)
+  }
+
+  @Get()
+  @HttpCode(200)
+  @Roles('root')
+  @UseGuards(RolesGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'ROOT:获取帖子列表',
+  })
+  async findAll(@Query() query, @UserInfo() userInfo: UserInfo) {
+    return await this.roomService.findAll(query, userInfo)
   }
 }

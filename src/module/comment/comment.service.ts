@@ -26,10 +26,10 @@ export class CommentService {
     }
     const roomData = await RoomModel.findOneAndUpdate(
       { hid: commentParam.oid },
-      { $inc: { 'stats.reply': 1 } }, //回复数+1
+      { $inc: { 'stats.floors': 1 } }, //回复数+1
       { returnDocument: 'after' }, //返回更新后的文档
     )
-    commentParam.floor = roomData.stats.reply //楼层数为主楼总回复数
+    commentParam.floor = roomData.stats.floors //楼层数为主楼的总楼层数(总回复数)
     if (roomData.status == 0) {
       throw new BadRequestException('不允许对未发布状态主题进行回复')
     }
@@ -53,15 +53,12 @@ export class CommentService {
     }
   }
 
-  //   async findAll() {
-  //     return `This action returns all comment`
-  //   }
-  async findOne(_id: string) {
+  async findList(_id: string) {
     const res = await CommentModel.findOne({ _id })
 
     return <ResponseData>{ message: '查找评论详情成功', code: 200, data: res }
   }
-
+  async findMyList(_id: string) {}
   async update(_id: string, commentParam: Comment, userInfo: UserInfo) {
     const pre = await CommentModel.findOne({ _id })
     if (!userInfo._id.equals(pre.from)) {
@@ -93,7 +90,7 @@ export class CommentService {
     }
 
     const res = await CommentModel.findOneAndDelete({
-        _id,
+      _id,
     })
       .then((res) => {
         return res
@@ -143,6 +140,13 @@ export class CommentService {
     }
   }
 
+  ///////////////////////////
+  //---以下为root权限接口---//
+  //////////////////////////
+  //待添加//
+  async findAll() {
+    return `This action returns all comment`
+  }
   //  二级评论方案-废弃(aggregate聚合管道例子)
   //   async findReplyList(_id: string, query) {
   //     const {

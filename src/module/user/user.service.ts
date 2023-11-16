@@ -189,7 +189,9 @@ export class UserService {
     return <ResponseData>{ message: '查找成功', code: 200, data: res }
   }
 
-  //---以下为root权限接口
+  ///////////////////////////
+  //---以下为root权限接口---//
+  //////////////////////////
   public async findAll(query) {
     const { page = 0, size = 0, order = 1, sort = 'createdAt' } = query
 
