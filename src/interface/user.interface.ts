@@ -136,13 +136,13 @@ export class User {
   public avatar?: string
 
   @Prop({
-    select: false,
+    _id: false,
     type: UserStats,
+    default: {},
   })
   @ApiProperty({
     description: '统计表',
     example: '统计各种数据',
-    default: {},
   })
   public stats: UserStats
 

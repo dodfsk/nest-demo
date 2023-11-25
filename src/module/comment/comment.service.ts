@@ -59,6 +59,7 @@ export class CommentService {
     return <ResponseData>{ message: '查找评论详情成功', code: 200, data: res }
   }
   async findMyList(_id: string) {}
+  
   async update(_id: string, commentParam: Comment, userInfo: UserInfo) {
     const pre = await CommentModel.findOne({ _id })
     if (!userInfo._id.equals(pre.from)) {
@@ -111,7 +112,7 @@ export class CommentService {
       .limit(size)
       .populate<{ from: User }>({
         path: 'from',
-        select: 'uid username avatar',
+        select: 'uid username avatar stats',
       })
       .populate<{ replyTo: Comment }>({
         path: 'replyTo',

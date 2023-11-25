@@ -70,7 +70,7 @@ export class RoomController {
   @ApiOperation({
     summary: '更新帖子内容',
   })
-  async update(
+  async updateMy(
     @Param('id') id: string,
     @Body() roomData: Room,
     @UserInfo() userInfo: UserInfo,
@@ -100,11 +100,11 @@ export class RoomController {
   @ApiOperation({
     summary: '删除帖子',
   })
-  async delete(@Param('id') id: string, @UserInfo() userInfo: UserInfo) {
+  async remove(@Param('id') id: string, @UserInfo() userInfo: UserInfo) {
     return await this.roomService.remove(id, userInfo)
   }
 
-  @Get()
+  @Get('root')
   @HttpCode(200)
   @Roles('root')
   @UseGuards(RolesGuard)

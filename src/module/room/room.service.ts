@@ -75,7 +75,7 @@ export class RoomService {
       .select('+content +assets')
       .populate<{ from: User }>({
         path: 'from',
-        select: 'uid username avatar',
+        select: 'uid username avatar stats',
       })
       .then((res) => {
         //替换@oss,后续将添加全局flag是否启用
@@ -96,7 +96,7 @@ export class RoomService {
 
         return res
       })
-    console.log(res)
+    // console.log(res)
 
     if (!res) {
       return this.roomIsNull
@@ -112,7 +112,7 @@ export class RoomService {
     const res = await RoomModel.find({ status: 2 })
       .populate<{ from: User }>({
         path: 'from',
-        select: 'uid username avatar',
+        select: 'uid username avatar stats',
       })
       .sort({ [sort]: order })
       .skip(page > 0 ? (page - 1) * size : 0)
@@ -149,7 +149,7 @@ export class RoomService {
     const res = await RoomModel.find({ from: userInfo._id, status })
       .populate<{ from: User }>({
         path: 'from',
-        select: 'uid username avatar',
+        select: 'uid username avatar stats',
       })
       .sort({ [sort]: order })
       .skip(page > 0 ? (page - 1) * size : 0)
@@ -174,7 +174,7 @@ export class RoomService {
     return
   }
   //更新用接口,待拆分出root接口
-  public async update(paramId: string, roomParam: Room, userInfo: UserInfo) {
+  public async updateMy(paramId: string, roomParam: Room, userInfo: UserInfo) {
     //权限判定
     const pre = await RoomModel.findOne({ hid: paramId })
     if (!userInfo._id.equals(pre.from)) {
@@ -262,7 +262,7 @@ export class RoomService {
     const res = await RoomModel.find({ status })
       .populate<{ from: User }>({
         path: 'from',
-        select: 'uid username avatar',
+        select: 'uid username avatar stats',
       })
       .sort({ [sort]: order })
       .skip(page > 0 ? (page - 1) * size : 0)
@@ -284,6 +284,42 @@ export class RoomService {
       data: { total, roomList: res },
     }
     return response
+  }
+  public async update(paramId: string, roomParam: Room, userInfo: UserInfo) {
+    //权限判定
+    const pre = await RoomModel.findOne({ hid: paramId })
+    if (!userInfo._id.equals(pre.from)) {
+      throw new BadRequestException('只能修改自己创建的帖子')
+    }
+
+    let { hid, from, stats, status, createdAt, ...updateParam } = roomParam
+    //解构剔除不更新的字段
+
+    updateParam.updatedAt = new Date()
+
+    //替换@oss,后续将添加全局flag是否启用
+    if (updateParam.content) {
+      updateParam.content = ImgToOss(updateParam.content)
+    }
+    if (updateParam.cover) {
+      updateParam.cover = UrlToOss(updateParam.cover)
+    }
+    if (updateParam.assets) {
+      updateParam.assets.forEach((item) => {
+        item.url = UrlToOss(item.url)
+      })
+    }
+
+    const res = await RoomModel.findOneAndUpdate({ hid: paramId }, updateParam)
+      .select('+content +assets')
+      .then((res) => {
+        return res
+      })
+      .catch((err) => {
+        throw new UnprocessableEntityException('更新room失败' + err)
+      })
+
+    return <ResponseData>{ message: '修改成功', code: 200, data: res }
   }
   //删除用接口,待拆分出root接口
   public async remove(paramId: string, userInfo: UserInfo) {
